@@ -1,0 +1,29 @@
+name: Deploy PYPI
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  deploy:
+    runs-on: [ubuntu-latest]
+    steps:
+      - uses: actions/checkout@master
+      - name: Set up Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
+      - name: Install dependencies
+        run: |
+          ls -al
+          python -m pip install --upgrade pip
+          pip install -U setuptools wheel twine
+      - name: Building distribution archives
+        run: |
+          python setup.py sdist bdist_wheel
+      - name: Deploying the distribution archives
+        run: |
+          echo "[pypi]
+          username = __token__
+          password = ${{ secrets.PYPI_TOKEN }}" > $HOME/.pypirc
+          twine upload dist/*

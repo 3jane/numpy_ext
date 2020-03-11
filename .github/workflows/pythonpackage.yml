@@ -1,0 +1,33 @@
+name: Python package
+
+on: [push]
+
+jobs:
+  checks:
+#    fail-fast: false
+    runs-on:  ${{ matrix.os }}
+    strategy:
+      max-parallel: 4
+      matrix:
+        os: [ubuntu-latest]
+        python-version: [3.6, 3.7, 3.8]
+
+    steps:
+    - uses: actions/checkout@master
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -e .[dev]
+    - name: Code flake8 check
+      run: |
+        flake8
+    - name: Doctest
+      run: |
+        python -m doctest numpy_ext.py
+    - name: Test with pytest
+      run: |
+        pytest
