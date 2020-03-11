@@ -2,5 +2,5 @@ pyflakes @ git+https://github.com/PyCQA/pyflakes
 flake8 @ git+https://github.com/PyCQA/flake8
 pytest~=4.3.0
 pandas~=0.25.3
-numpydoc
-sphinx
+numpydoc~=0.9.2
+sphinx~=2.4.4
