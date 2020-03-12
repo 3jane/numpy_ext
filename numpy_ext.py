@@ -59,6 +59,7 @@ def expstep_range(
 ) -> np.ndarray:
     """
     Return spaced values within a given interval. Step is increased by a multiplier with each iteration.
+
     Parameters
     ----------
     start : int or float
@@ -71,10 +72,12 @@ def expstep_range(
         Multiplier by which to increase step with each iteration. Should be bigger than 0. Default is 1
     round_func: Callable, optional
         Vectorized rounding function, e.g. np.ceil, np.floor, etc.
+
     Returns
     -------
     np.ndarray
         Array of exponentially spaced values.
+
     Examples
     --------
     >>> expstep_range(1, 100, min_step=1, step_mult=1.5)
@@ -120,16 +123,19 @@ def expstep_range(
 def apply_map(func: Callable, array: Union[List, np.ndarray]) -> np.ndarray:
     """
     Apply function for each array elements.
+
     Parameters
     ----------
     func : Callable
         This function should accept one argument
     array : Union[List, np.ndarray]
         Input array. Lists would converts to np.ndarray
+
     Returns
     -------
     np.ndarray
         Output ndarray
+
     Examples
     --------
     >>> apply_map(lambda x: 0 if x < 3 else 1, [[2, 2], [3, 3]])
@@ -150,14 +156,17 @@ def apply_map(func: Callable, array: Union[List, np.ndarray]) -> np.ndarray:
 def nans(shape: Union[int, Tuple[int]]) -> np.ndarray:
     """
     Return a new array of given shape and type, filled with np.nans.
+
     Parameters
     ----------
     shape : int or tuple of ints
         Shape of the new array, e.g., (2, 3) or 2.
+
     Returns
     -------
     np.ndarray
         Array of np.nans with the given shape.
+
     Examples
     --------
     >>> nans(3)
@@ -174,14 +183,17 @@ def nans(shape: Union[int, Tuple[int]]) -> np.ndarray:
 def drop_na(array: np.ndarray) -> np.ndarray:
     """
     Return a new array without nans
+
     Parameters
     ----------
     array : np.ndarray
         Input array
+
     Returns
     -------
     np.ndarray
         New array without nans
+
     Examples
     --------
     >>> drop_na(np.array([np.nan, 1, 2]))
@@ -193,16 +205,19 @@ def drop_na(array: np.ndarray) -> np.ndarray:
 def fill_na(array: np.ndarray, value: Any) -> np.ndarray:
     """
     Return a new array with nans replaced with given values
+
     Parameters
     ----------
     array : np.ndarray
         Input array
     value : Any
         Value to replace nans with
+
     Returns
     -------
     np.ndarray
         New array with nans replaced with given values
+
     Examples
     --------
     >>> fill_na(np.array([np.nan, 1, 2]), -1)
@@ -216,16 +231,19 @@ def fill_na(array: np.ndarray, value: Any) -> np.ndarray:
 def fill_not_finite(array: np.ndarray, value: Any = 0) -> np.ndarray:
     """
     Return a new array with nans and infs replaced with given values
+
     Parameters
     ----------
     array : np.ndarray
         Input array
     value : Any, optional
         Value to replace nans and infs with. Default is 0
+
     Returns
     -------
     np.ndarray
         New array with nans and infs replaced with given values
+
     Examples
     --------
     >>> fill_not_finite(np.array([np.nan, np.inf, 1, 2]), 99)
@@ -239,16 +257,19 @@ def fill_not_finite(array: np.ndarray, value: Any = 0) -> np.ndarray:
 def prepend_na(array: np.ndarray, size: int) -> np.ndarray:
     """
     Return a new array with nans added at the beginning.
+
     Parameters
     ----------
     array : np.ndarray
         Input array
     size : int
         How many elements to add
+
     Returns
     -------
     np.ndarray
         New array with nans added at the beginning
+
     Examples
     --------
     >>> prepend_na(np.array([1, 2]), 2)
@@ -270,6 +291,7 @@ def rolling(
 ) -> Union[Generator[np.ndarray, None, None], np.ndarray]:
     """
     Return rolling window array or generator
+
     Parameters
     ----------
     array : np.ndarray
@@ -280,10 +302,12 @@ def rolling(
         If True skip's first `window - 1` nans. Default is False
     as_array : bool, optional
         If True than returns ndarray otherwise generator. Default is False
+
     Returns
     -------
     np.ndarray or Generator[np.ndarray, None, None]
         Rolling window matrix or generator
+
     Examples
     --------
     >>> rolling(np.array([1, 2, 3, 4, 5]), 2, as_array=True)
@@ -316,6 +340,7 @@ def rolling(
 def rolling_apply(func: Callable, window: int, *arrays: np.ndarray, n_jobs: int = 1, **kwargs) -> np.ndarray:
     """
     The rolling function's apply function
+
     Parameters
     ----------
     func : Callable
@@ -328,9 +353,11 @@ def rolling_apply(func: Callable, window: int, *arrays: np.ndarray, n_jobs: int 
         Parallel tasks count for joblib. Default is 1
     **kwargs : dict
         Input parameters (passed to func)
+
     Returns
     -------
     np.ndarray
+
     Examples
     --------
     >>> arr = np.array([1, 2, 3, 4, 5])
@@ -371,6 +398,7 @@ def expanding(
 ) -> Union[Generator[np.ndarray, None, None], np.ndarray]:
     """
     Provide expanding transformations
+
     Parameters
     ----------
     array : np.ndarray
@@ -381,9 +409,11 @@ def expanding(
         If True skip's first nans (rows with size lower than min_periods). Default is True
     as_array : bool, optional
         If True than returns ndarray otherwise generator. Default is False
+
     Returns
     -------
     np.ndarray or Generator[np.ndarray, None, None]
+
     Examples
     --------
     >>> expanding(np.array([1, 2, 3, 4, 5]), 3, as_array=True)
@@ -408,6 +438,7 @@ def expanding(
 def expanding_apply(func: Callable, min_periods: int, *arrays: np.ndarray, n_jobs: int = 1, **kwargs) -> np.ndarray:
     """
     The expanding function's apply function
+
     Parameters
     ----------
     func : Callable
@@ -420,9 +451,11 @@ def expanding_apply(func: Callable, min_periods: int, *arrays: np.ndarray, n_job
         Parallel tasks count for joblib. Default is 1
     **kwargs : dict
         Input parameters (passed to func)
+
     Returns
     -------
     np.ndarray
+
     Examples
     --------
     >>> arr = np.array([1, 2, 3, 4, 5])
