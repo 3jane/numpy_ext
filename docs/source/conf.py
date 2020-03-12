@@ -63,7 +63,6 @@ html4_writer = True
 html_theme = 'scipy'
 html_theme_path = ['_theme']
 # html_logo = '_static/scipyshiny_small.png'
-html_static_path = ['_static']
 html_theme_options = {
     "edit_link": "true",
     "sidebar": "right",
