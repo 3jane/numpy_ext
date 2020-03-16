@@ -235,19 +235,19 @@ def test_expstep_range(params, test_result):
     [
         (
             dict(start=-100, end=-200, min_step=0, step_mult=1.25),
-            "min_step should be bigger than 0"
+            'min_step should be bigger than 0'
         ),
         (
             dict(start=-100, end=-200, min_step=-1, step_mult=1.25),
-            "min_step should be bigger than 0"
+            'min_step should be bigger than 0'
         ),
         (
             dict(start=-100, end=-200, min_step=1, step_mult=0),
-            "mult_step should be bigger than 0"
+            'mult_step should be bigger than 0'
         ),
         (
             dict(start=-100, end=-200, min_step=1, step_mult=-1),
-            "mult_step should be bigger than 0"
+            'mult_step should be bigger than 0'
         ),
     ]
 )
@@ -294,3 +294,46 @@ def test_apply(arr, res_array):
         npext.apply_map(lambda x: 0 if x < 3 else 1, arr),
         res_array
     )
+
+
+@pytest.mark.parametrize(
+    'func, params, exc_class, exc_message_pattern',
+    [
+        (
+            npext.expanding,
+            dict(array=np.arange(10), min_periods=11),
+            ValueError,
+            'array.size should be bigger than min_periods'
+        ),
+        (
+            npext.rolling,
+            dict(array=np.arange(10), window=11),
+            ValueError,
+            'array.size should be bigger than window'
+        ),
+        (
+            npext.expanding,
+            dict(array=np.arange(10), min_periods=11.),
+            TypeError,
+            "Wrong min_periods"
+        ),
+        (
+            npext.rolling,
+            dict(array=np.arange(10), window=11.),
+            TypeError,
+            "Wrong window"
+        ),
+
+    ]
+)
+def test_window_func_exceptions(func, params, exc_class, exc_message_pattern):
+    with pytest.raises(exc_class, match=exc_message_pattern):
+        func(**params)
+
+
+def test_expanding_with_nans():
+    array = np.arange(10)
+    res = npext.expanding(array, min_periods=2, skip_nans=False, as_array=True)
+
+    assert len(array) == len(res)
+    assert np.isnan(res[0]).all()
