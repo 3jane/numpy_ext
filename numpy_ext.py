@@ -95,10 +95,10 @@ def expstep_range(
     array([100,  99,  97,  95,  91,  86,  79,  67,  50,  25])
     """
     if step_mult <= 0:
-        raise ValueError("mult_step should be bigger than 0")
+        raise ValueError('mult_step should be bigger than 0')
 
     if min_step <= 0:
-        raise ValueError("min_step should be bigger than 0")
+        raise ValueError('min_step should be bigger than 0')
 
     last = start
     values = []
@@ -372,10 +372,10 @@ def rolling_apply(func: Callable, window: int, *arrays: np.ndarray, n_jobs: int 
         raise TypeError(f'Wrong window type ({type(window)}) int expected')
 
     if max(len(x.shape) for x in arrays) != 1:
-        raise ValueError("Wrong array shape. Supported only 1D arrays")
+        raise ValueError('Wrong array shape. Supported only 1D arrays')
 
     if len({array.size for array in arrays}) != 1:
-        raise ValueError("Arrays must be the same length")
+        raise ValueError('Arrays must be the same length')
 
     def _apply_func_to_arrays(idxs):
         return func(*[array[idxs.astype(np.int)] for array in arrays], **kwargs)
@@ -470,10 +470,10 @@ def expanding_apply(func: Callable, min_periods: int, *arrays: np.ndarray, n_job
         raise TypeError(f'Wrong min_periods type ({type(min_periods)}) int expected')
 
     if max(len(x.shape) for x in arrays) != 1:
-        raise ValueError("Supported only 1-D arrays")
+        raise ValueError('Supported only 1-D arrays')
 
     if len({array.size for array in arrays}) != 1:
-        raise ValueError("Arrays must be the same length")
+        raise ValueError('Arrays must be the same length')
 
     def _apply_func_to_arrays(idxs):
         return func(*[array[idxs.astype(np.int)] for array in arrays], **kwargs)
