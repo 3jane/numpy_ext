@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>numpy_ext &mdash; numpy_ext  documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="_static/css/spc-extend.css">
+    <link rel="stylesheet" href="_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script type="text/javascript" src="_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="genindex.html" >
+    <link rel="search" title="Search" href="search.html" >
+    <link rel="top" title="numpy_ext  documentation" href="#" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+        <li class="active"><a href="https://3jane.com/">3Jane</a></li>
+        <li class="active"><a href="https://github.com/3jane">github</a></li>
+	 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+      <li class="active">
+        <a href="py-modindex.html" title="Python Module Index"
+           >modules</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <span class="target" id="module-numpy_ext"></span><div class="section" id="numpy-ext">
+<h1>numpy_ext<a class="headerlink" href="#numpy-ext" title="Permalink to this headline">¶</a></h1>
+<p>An extension library for <a class="reference external" href="https://numpy.org/">NumPy</a> that implements common array operations not present in NumPy.</p>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p><strong>Regular installation</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">numpy_ext</span>
+</pre></div>
+</div>
+<p><strong>Installation for development</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="mi">3</span><span class="n">jane</span><span class="o">/</span><span class="n">numpy_ext</span><span class="o">.</span><span class="n">git</span>
+<span class="n">cd</span> <span class="n">numpy_ext</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">e</span> <span class="o">.</span><span class="p">[</span><span class="n">dev</span><span class="p">]</span>  <span class="c1"># note: make sure you are using pip&gt;=20</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="window-operations">
+<h2>Window operations<a class="headerlink" href="#window-operations" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="#numpy_ext.expanding" title="numpy_ext.expanding"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy_ext.expanding()</span></code></a></li>
+<li><a class="reference internal" href="#numpy_ext.expanding_apply" title="numpy_ext.expanding_apply"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy_ext.expanding_apply()</span></code></a></li>
+<li><a class="reference internal" href="#numpy_ext.rolling" title="numpy_ext.rolling"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy_ext.rolling()</span></code></a></li>
+<li><a class="reference internal" href="#numpy_ext.rolling_apply" title="numpy_ext.rolling_apply"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy_ext.rolling_apply()</span></code></a></li>
+</ul>
+</div>
+<div class="section" id="operations-with-nans">
+<h2>Operations with nans<a class="headerlink" href="#operations-with-nans" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="#numpy_ext.nans" title="numpy_ext.nans"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy_ext.nans()</span></code></a></li>
+<li><a class="reference internal" href="#numpy_ext.drop_na" title="numpy_ext.drop_na"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy_ext.drop_na()</span></code></a></li>
+<li><a class="reference internal" href="#numpy_ext.fill_na" title="numpy_ext.fill_na"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy_ext.fill_na()</span></code></a></li>
+<li><a class="reference internal" href="#numpy_ext.fill_not_finite" title="numpy_ext.fill_not_finite"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy_ext.fill_not_finite()</span></code></a></li>
+<li><a class="reference internal" href="#numpy_ext.prepend_na" title="numpy_ext.prepend_na"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy_ext.prepend_na()</span></code></a></li>
+</ul>
+</div>
+<div class="section" id="others">
+<h2>Others<a class="headerlink" href="#others" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="#numpy_ext.apply_map" title="numpy_ext.apply_map"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy_ext.apply_map()</span></code></a></li>
+<li><a class="reference internal" href="#numpy_ext.expstep_range" title="numpy_ext.expstep_range"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy_ext.expstep_range()</span></code></a></li>
+</ul>
+</div>
+<div class="section" id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="numpy_ext.apply_map">
+<code class="descclassname">numpy_ext.</code><code class="descname">apply_map</code><span class="sig-paren">(</span><em>func: Callable[[Any], Any], array: Union[List, numpy.ndarray]</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/numpy_ext.html#apply_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#numpy_ext.apply_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply a function element-wise to an array.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>func</strong><span class="classifier">Callable[[Any], Any]</span></dt><dd><p>Function that accepts one argument and returns a single value.</p>
+</dd>
+<dt><strong>array</strong><span class="classifier">Union[List, np.ndarray]</span></dt><dd><p>Input array or a list. Any lists will be converted to np.ndarray first.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt>np.ndarray</dt><dd><p>Resulting array.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">apply_map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="k">else</span> <span class="mi">1</span><span class="p">,</span> <span class="p">[[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]])</span>
+<span class="go">array([[0, 0],</span>
+<span class="go">       [1, 1]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="numpy_ext.drop_na">
+<code class="descclassname">numpy_ext.</code><code class="descname">drop_na</code><span class="sig-paren">(</span><em>array: numpy.ndarray</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/numpy_ext.html#drop_na"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#numpy_ext.drop_na" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a given array flattened and with nans dropped.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>array</strong><span class="classifier">np.ndarray</span></dt><dd><p>Input array.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt>np.ndarray</dt><dd><p>New array without nans.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">drop_na</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]))</span>
+<span class="go">array([1., 2.])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="numpy_ext.expanding">
+<code class="descclassname">numpy_ext.</code><code class="descname">expanding</code><span class="sig-paren">(</span><em>array: numpy.ndarray</em>, <em>min_periods: int = 1</em>, <em>skip_nans: bool = True</em>, <em>as_array: bool = False</em><span class="sig-paren">)</span> &#x2192; Union[Generator[numpy.ndarray, NoneType, NoneType], numpy.ndarray]<a class="reference internal" href="_modules/numpy_ext.html#expanding"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#numpy_ext.expanding" title="Permalink to this definition">¶</a></dt>
+<dd><p>Roll an expanding window over an array.
+The window size starts at min_periods and gets incremented by 1 on each iteration.
+The result is either a 2-D array or a generator of slices, controlled by <cite>as_array</cite> parameter.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>array</strong><span class="classifier">np.ndarray</span></dt><dd><p>Input array.</p>
+</dd>
+<dt><strong>min_periods</strong><span class="classifier">int, optional</span></dt><dd><p>Minimum size of the window. Default is 1.</p>
+</dd>
+<dt><strong>skip_nans</strong><span class="classifier">bool, optional</span></dt><dd><p>If False, the windows of size less than min_periods are filled with nans. If True, they’re dropped.
+Default is True.</p>
+</dd>
+<dt><strong>as_array</strong><span class="classifier">bool, optional</span></dt><dd><p>If True, return a 2-D array. Otherwise, return a generator of slices. Default is False.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt>np.ndarray or Generator[np.ndarray, None, None]</dt><dd></dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">expanding</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]),</span> <span class="mi">3</span><span class="p">,</span> <span class="n">as_array</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">array([array([1, 2, 3]), array([1, 2, 3, 4]), array([1, 2, 3, 4, 5])],</span>
+<span class="go">      dtype=object)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="numpy_ext.expanding_apply">
+<code class="descclassname">numpy_ext.</code><code class="descname">expanding_apply</code><span class="sig-paren">(</span><em>func: Callable</em>, <em>min_periods: int</em>, <em>*arrays: numpy.ndarray</em>, <em>n_jobs: int = 1</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/numpy_ext.html#expanding_apply"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#numpy_ext.expanding_apply" title="Permalink to this definition">¶</a></dt>
+<dd><p>Roll an expanding window over an array or a group of arrays producing slices.
+The window size starts at min_periods and gets incremented by 1 on each iteration.
+Apply a function to each slice / group of slices, transforming them into a value.
+Perform computations in parallel, optionally.
+Return a new np.ndarray with the resulting values.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>func</strong><span class="classifier">Callable</span></dt><dd><p>The function to apply to each slice or a group of slices.</p>
+</dd>
+<dt><strong>min_periods</strong><span class="classifier">int</span></dt><dd><p>Minimal size of expanding window.</p>
+</dd>
+<dt><strong>*arrays</strong><span class="classifier">list</span></dt><dd><p>List of input arrays.</p>
+</dd>
+<dt><strong>n_jobs</strong><span class="classifier">int, optional</span></dt><dd><p>Parallel tasks count for joblib. If 1, joblib won’t be used. Default is 1.</p>
+</dd>
+<dt><strong>**kwargs</strong><span class="classifier">dict</span></dt><dd><p>Input parameters (passed to func, must be named).</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt>np.ndarray</dt><dd></dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">expanding_apply</span><span class="p">(</span><span class="nb">sum</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">arr</span><span class="p">)</span>
+<span class="go">array([nan,  3.,  6., 10., 15.])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">arr2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">,</span> <span class="mf">5.5</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">func</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">a1</span><span class="p">)</span> <span class="o">+</span> <span class="nb">max</span><span class="p">(</span><span class="n">a2</span><span class="p">))</span> <span class="o">*</span> <span class="n">k</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">expanding_apply</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">arr</span><span class="p">,</span> <span class="n">arr2</span><span class="p">,</span> <span class="n">k</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">array([  nan,  -5.5,  -9.5, -14.5, -20.5])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="numpy_ext.expstep_range">
+<code class="descclassname">numpy_ext.</code><code class="descname">expstep_range</code><span class="sig-paren">(</span><em>start: Union[int, float], end: Union[int, float], min_step: Union[int, float] = 1, step_mult: Union[int, float] = 1, round_func: Callable = None</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/numpy_ext.html#expstep_range"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#numpy_ext.expstep_range" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return spaced values within a given interval. Step is increased by a multiplier on each iteration.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>start</strong><span class="classifier">int or float</span></dt><dd><p>Start of interval, inclusive</p>
+</dd>
+<dt><strong>end</strong><span class="classifier">int or float</span></dt><dd><p>End of interval, exclusive</p>
+</dd>
+<dt><strong>min_step</strong><span class="classifier">int or float, optional</span></dt><dd><p>Minimal step between values. Must be bigger than 0. Default is 1.</p>
+</dd>
+<dt><strong>step_mult</strong><span class="classifier">int or float, optional</span></dt><dd><p>Multiplier by which to increase the step on each iteration. Must be bigger than 0. Default is 1.</p>
+</dd>
+<dt><strong>round_func: Callable, optional</strong></dt><dd><p>Vectorized rounding function, e.g. np.ceil, np.floor, etc. Default is None.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt>np.ndarray</dt><dd><p>Array of exponentially spaced values.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">expstep_range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">min_step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">step_mult</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
+<span class="go">array([ 1.        ,  2.        ,  3.5       ,  5.75      ,  9.125     ,</span>
+<span class="go">       14.1875    , 21.78125   , 33.171875  , 50.2578125 , 75.88671875])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">expstep_range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">min_step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">step_mult</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">round_func</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">)</span>
+<span class="go">array([ 1.,  2.,  4.,  6., 10., 15., 22., 34., 51., 76.])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">expstep_range</span><span class="p">(</span><span class="n">start</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">end</span><span class="o">=-</span><span class="mi">100</span><span class="p">,</span> <span class="n">min_step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">step_mult</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
+<span class="go">array([ -1.        ,  -2.        ,  -3.5       ,  -5.75      ,</span>
+<span class="go">        -9.125     , -14.1875    , -21.78125   , -33.171875  ,</span>
+<span class="go">       -50.2578125 , -75.88671875])</span>
+</pre></div>
+</div>
+<p>Generate array of ints</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">expstep_range</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">min_step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">step_mult</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="go">array([100,  99,  97,  95,  91,  86,  79,  67,  50,  25])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="numpy_ext.fill_na">
+<code class="descclassname">numpy_ext.</code><code class="descname">fill_na</code><span class="sig-paren">(</span><em>array: numpy.ndarray</em>, <em>value: Any</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/numpy_ext.html#fill_na"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#numpy_ext.fill_na" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a copy of array with nans replaced with a given value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>array</strong><span class="classifier">np.ndarray</span></dt><dd><p>Input array.</p>
+</dd>
+<dt><strong>value</strong><span class="classifier">Any</span></dt><dd><p>Value to replace nans with.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt>np.ndarray</dt><dd><p>A copy of array with nans replaced with the given value.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fill_na</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">array([-1.,  1.,  2.])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="numpy_ext.fill_not_finite">
+<code class="descclassname">numpy_ext.</code><code class="descname">fill_not_finite</code><span class="sig-paren">(</span><em>array: numpy.ndarray</em>, <em>value: Any = 0</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/numpy_ext.html#fill_not_finite"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#numpy_ext.fill_not_finite" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a copy of array with nans and infs replaced with a given value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>array</strong><span class="classifier">np.ndarray</span></dt><dd><p>Input array.</p>
+</dd>
+<dt><strong>value</strong><span class="classifier">Any, optional</span></dt><dd><p>Value to replace nans and infs with. Default is 0.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt>np.ndarray</dt><dd><p>A copy of array with nans and infs replaced with the given value.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fill_not_finite</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]),</span> <span class="mi">99</span><span class="p">)</span>
+<span class="go">array([99., 99.,  1.,  2.])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="numpy_ext.nans">
+<code class="descclassname">numpy_ext.</code><code class="descname">nans</code><span class="sig-paren">(</span><em>shape: Union[int, Tuple[int]]</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/numpy_ext.html#nans"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#numpy_ext.nans" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a new array of a given shape and type, filled with np.nan values.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>shape</strong><span class="classifier">int or tuple of ints</span></dt><dd><p>Shape of the new array, e.g., (2, 3) or 2.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt>np.ndarray</dt><dd><p>Array of np.nans of the given shape.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">nans</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="go">array([nan, nan, nan])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nans</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="go">array([[nan, nan],</span>
+<span class="go">       [nan, nan]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="numpy_ext.prepend_na">
+<code class="descclassname">numpy_ext.</code><code class="descname">prepend_na</code><span class="sig-paren">(</span><em>array: numpy.ndarray</em>, <em>n: int</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/numpy_ext.html#prepend_na"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#numpy_ext.prepend_na" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a copy of array with nans inserted at the beginning.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>array</strong><span class="classifier">np.ndarray</span></dt><dd><p>Input array.</p>
+</dd>
+<dt><strong>n</strong><span class="classifier">int</span></dt><dd><p>Number of elements to insert.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt>np.ndarray</dt><dd><p>New array with nans added at the beginning.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">prepend_na</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]),</span> <span class="mi">2</span><span class="p">)</span>
+<span class="go">array([nan, nan,  1.,  2.])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="numpy_ext.rolling">
+<code class="descclassname">numpy_ext.</code><code class="descname">rolling</code><span class="sig-paren">(</span><em>array: numpy.ndarray</em>, <em>window: int</em>, <em>skip_nans: bool = False</em>, <em>as_array: bool = False</em><span class="sig-paren">)</span> &#x2192; Union[Generator[numpy.ndarray, NoneType, NoneType], numpy.ndarray]<a class="reference internal" href="_modules/numpy_ext.html#rolling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#numpy_ext.rolling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Roll a fixed-width window over an array.
+The result is either a 2-D array or a generator of slices, controlled by <cite>as_array</cite> parameter.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>array</strong><span class="classifier">np.ndarray</span></dt><dd><p>Input array.</p>
+</dd>
+<dt><strong>window</strong><span class="classifier">int</span></dt><dd><p>Size of the rolling window.</p>
+</dd>
+<dt><strong>skip_nans</strong><span class="classifier">bool, optional</span></dt><dd><p>If False, the sequence starts with (window-1) windows filled with nans. If True, those are omitted.
+Default is False.</p>
+</dd>
+<dt><strong>as_array</strong><span class="classifier">bool, optional</span></dt><dd><p>If True, return a 2-D array. Otherwise, return a generator of slices. Default is False.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt>np.ndarray or Generator[np.ndarray, None, None]</dt><dd><p>Rolling window matrix or generator</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rolling</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]),</span> <span class="mi">2</span><span class="p">,</span> <span class="n">as_array</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">array([[nan,  1.],</span>
+<span class="go">       [ 1.,  2.],</span>
+<span class="go">       [ 2.,  3.],</span>
+<span class="go">       [ 3.,  4.],</span>
+<span class="go">       [ 4.,  5.]])</span>
+</pre></div>
+</div>
+<p>Usage with numpy functions</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">arr</span> <span class="o">=</span> <span class="n">rolling</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]),</span> <span class="mi">2</span><span class="p">,</span> <span class="n">as_array</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">array([nan,  3.,  5.,  7.,  9.])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="numpy_ext.rolling_apply">
+<code class="descclassname">numpy_ext.</code><code class="descname">rolling_apply</code><span class="sig-paren">(</span><em>func: Callable</em>, <em>window: int</em>, <em>*arrays: numpy.ndarray</em>, <em>n_jobs: int = 1</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/numpy_ext.html#rolling_apply"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#numpy_ext.rolling_apply" title="Permalink to this definition">¶</a></dt>
+<dd><p>Roll a fixed-width window over an array or a group of arrays, producing slices.
+Apply a function to each slice / group of slices, transforming them into a value.
+Perform computations in parallel, optionally.
+Return a new np.ndarray with the resulting values.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>func</strong><span class="classifier">Callable</span></dt><dd><p>The function to apply to each slice or a group of slices.</p>
+</dd>
+<dt><strong>window</strong><span class="classifier">int</span></dt><dd><p>Window size.</p>
+</dd>
+<dt><strong>*arrays</strong><span class="classifier">list</span></dt><dd><p>List of input arrays.</p>
+</dd>
+<dt><strong>n_jobs</strong><span class="classifier">int, optional</span></dt><dd><p>Parallel tasks count for joblib. If 1, joblib won’t be used. Default is 1.</p>
+</dd>
+<dt><strong>**kwargs</strong><span class="classifier">dict</span></dt><dd><p>Input parameters (passed to func, must be named).</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt>np.ndarray</dt><dd></dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rolling_apply</span><span class="p">(</span><span class="nb">sum</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">arr</span><span class="p">)</span>
+<span class="go">array([nan,  3.,  5.,  7.,  9.])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">arr2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">,</span> <span class="mf">5.5</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">func</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">a1</span><span class="p">)</span> <span class="o">+</span> <span class="nb">max</span><span class="p">(</span><span class="n">a2</span><span class="p">))</span> <span class="o">*</span> <span class="n">k</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rolling_apply</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">arr</span><span class="p">,</span> <span class="n">arr2</span><span class="p">,</span> <span class="n">k</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">array([  nan,  -5.5,  -8.5, -11.5, -14.5])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">numpy_ext</a><ul>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#window-operations">Window operations</a></li>
+<li><a class="reference internal" href="#operations-with-nans">Operations with nans</a></li>
+<li><a class="reference internal" href="#others">Others</a></li>
+<li><a class="reference internal" href="#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <div>
+    <a href="_sources/index.rst.txt"
+       rel="nofollow">Show Source</a>
+  </div>
+<div class="this-page-menu">
+  <a href="/scipy/docs/scipy-docs/index.rst.rst">Edit page</a>
+</div>
+
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2020, 3jane.
+      </li>
+      <li>
+      Created using <a href="https://www.sphinx-doc.org">Sphinx</a> 2.4.4.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>
