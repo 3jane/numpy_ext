@@ -1,5 +1,4 @@
-pyflakes @ git+https://github.com/PyCQA/pyflakes
-flake8 @ git+https://github.com/PyCQA/flake8
+flake8~=3.7.9
 pytest~=4.3.0
 pytest-cov~=2.8.1
 pandas~=0.25.3
