@@ -340,7 +340,11 @@ def rolling(
 
     def rows_gen():
         if not skip_nans:
-            yield from (prepend_na(array[:i + 1], (window - 1) - i) for i in np.arange(window - 1))
+            prepend_func = prepend_na
+            if np.issubdtype(array.dtype, np.datetime64):
+                prepend_func = lambda arr, n: np.hstack((np.repeat(np.datetime64('NaT'), n), arr))
+
+            yield from (prepend_func(array[:i + 1], (window - 1) - i) for i in np.arange(window - 1))
 
         yield from (array[i:i + window] for i in np.arange(array.size - (window - 1)))
 
