@@ -293,7 +293,7 @@ def prepend_na(array: np.ndarray, n: int) -> np.ndarray:
 def rolling(
     array: np.ndarray,
     window: int,
-    skip_nans: bool = False,
+    skip_na: bool = False,
     as_array: bool = False
 ) -> Union[Generator[np.ndarray, None, None], np.ndarray]:
     """
@@ -306,7 +306,7 @@ def rolling(
         Input array.
     window : int
         Size of the rolling window.
-    skip_nans : bool, optional
+    skip_na : bool, optional
         If False, the sequence starts with (window-1) windows filled with nans. If True, those are omitted.
         Default is False.
     as_array : bool, optional
@@ -339,7 +339,7 @@ def rolling(
         raise ValueError('array.size should be bigger than window')
 
     def rows_gen():
-        if not skip_nans:
+        if not skip_na:
             prepend_func = prepend_na
             if np.issubdtype(array.dtype, np.datetime64):
                 prepend_func = lambda arr, n: np.hstack((np.repeat(np.datetime64('NaT'), n), arr))
@@ -397,7 +397,7 @@ def rolling_apply(func: Callable, window: int, *arrays: np.ndarray, n_jobs: int 
     def _apply_func_to_arrays(idxs):
         return func(*[array[idxs.astype(np.int)] for array in arrays], **kwargs)
 
-    rolls = rolling(np.arange(len(arrays[0])), window, skip_nans=True)
+    rolls = rolling(np.arange(len(arrays[0])), window, skip_na=True)
 
     if n_jobs == 1:
         arr = [_apply_func_to_arrays(idxs) for idxs in rolls]
@@ -410,7 +410,7 @@ def rolling_apply(func: Callable, window: int, *arrays: np.ndarray, n_jobs: int 
 def expanding(
     array: np.ndarray,
     min_periods: int = 1,
-    skip_nans: bool = True,
+    skip_na: bool = True,
     as_array: bool = False
 ) -> Union[Generator[np.ndarray, None, None], np.ndarray]:
     """
@@ -424,7 +424,7 @@ def expanding(
         Input array.
     min_periods : int, optional
         Minimum size of the window. Default is 1.
-    skip_nans : bool, optional
+    skip_na : bool, optional
         If False, the windows of size less than min_periods are filled with nans. If True, they're dropped.
         Default is True.
     as_array : bool, optional
@@ -447,7 +447,7 @@ def expanding(
         raise ValueError('array.size should be bigger than min_periods')
 
     def rows_gen():
-        if not skip_nans:
+        if not skip_na:
             yield from (nans(i) for i in np.arange(1, min_periods))
 
         yield from (array[:i] for i in np.arange(min_periods, array.size + 1))
@@ -502,7 +502,7 @@ def expanding_apply(func: Callable, min_periods: int, *arrays: np.ndarray, n_job
     def _apply_func_to_arrays(idxs):
         return func(*[array[idxs.astype(np.int)] for array in arrays], **kwargs)
 
-    rolls = expanding(np.arange(len(arrays[0])), min_periods, skip_nans=True)
+    rolls = expanding(np.arange(len(arrays[0])), min_periods, skip_na=True)
     if n_jobs == 1:
         arr = [_apply_func_to_arrays(idxs) for idxs in rolls]
     else:

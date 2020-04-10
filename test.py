@@ -122,7 +122,7 @@ def test_rolling_gen():
         [0., 1., 3.]
     ])
     res_gen = np.array(list(npext.rolling(array, 3)))
-    res_gen_skip = np.array(list(npext.rolling(array, 3, skip_nans=True)))
+    res_gen_skip = np.array(list(npext.rolling(array, 3, skip_na=True)))
 
     assert np.isnan(res_gen[:2]).any()
     assert np.array_equal(res_gen[2:], res[2:])
@@ -352,7 +352,7 @@ def test_window_func_exceptions(func, params, exc_class, exc_message_pattern):
 
 def test_expanding_with_nans():
     array = np.arange(10)
-    res = npext.expanding(array, min_periods=2, skip_nans=False, as_array=True)
+    res = npext.expanding(array, min_periods=2, skip_na=False, as_array=True)
 
     assert len(array) == len(res)
     assert np.isnan(res[0]).all()
