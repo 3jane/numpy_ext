@@ -180,7 +180,7 @@
 
 <dl class="function">
 <dt id="numpy_ext.expanding">
-<code class="descclassname">numpy_ext.</code><code class="descname">expanding</code><span class="sig-paren">(</span><em>array: numpy.ndarray</em>, <em>min_periods: int = 1</em>, <em>skip_nans: bool = True</em>, <em>as_array: bool = False</em><span class="sig-paren">)</span> &#x2192; Union[Generator[numpy.ndarray, NoneType, NoneType], numpy.ndarray]<a class="reference internal" href="_modules/numpy_ext.html#expanding"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#numpy_ext.expanding" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">numpy_ext.</code><code class="descname">expanding</code><span class="sig-paren">(</span><em>array: numpy.ndarray</em>, <em>min_periods: int = 1</em>, <em>skip_na: bool = True</em>, <em>as_array: bool = False</em><span class="sig-paren">)</span> &#x2192; Union[Generator[numpy.ndarray, NoneType, NoneType], numpy.ndarray]<a class="reference internal" href="_modules/numpy_ext.html#expanding"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#numpy_ext.expanding" title="Permalink to this definition">¶</a></dt>
 <dd><p>Roll an expanding window over an array.
 The window size starts at min_periods and gets incremented by 1 on each iteration.
 The result is either a 2-D array or a generator of slices, controlled by <cite>as_array</cite> parameter.</p>
@@ -193,7 +193,7 @@ The result is either a 2-D array or a generator of slices, controlled by <cite>a
 </dd>
 <dt><strong>min_periods</strong><span class="classifier">int, optional</span></dt><dd><p>Minimum size of the window. Default is 1.</p>
 </dd>
-<dt><strong>skip_nans</strong><span class="classifier">bool, optional</span></dt><dd><p>If False, the windows of size less than min_periods are filled with nans. If True, they’re dropped.
+<dt><strong>skip_na</strong><span class="classifier">bool, optional</span></dt><dd><p>If False, the windows of size less than min_periods are filled with nans. If True, they’re dropped.
 Default is True.</p>
 </dd>
 <dt><strong>as_array</strong><span class="classifier">bool, optional</span></dt><dd><p>If True, return a 2-D array. Otherwise, return a generator of slices. Default is False.</p>
@@ -437,7 +437,7 @@ Return a new np.ndarray with the resulting values.</p>
 
 <dl class="function">
 <dt id="numpy_ext.rolling">
-<code class="descclassname">numpy_ext.</code><code class="descname">rolling</code><span class="sig-paren">(</span><em>array: numpy.ndarray</em>, <em>window: int</em>, <em>skip_nans: bool = False</em>, <em>as_array: bool = False</em><span class="sig-paren">)</span> &#x2192; Union[Generator[numpy.ndarray, NoneType, NoneType], numpy.ndarray]<a class="reference internal" href="_modules/numpy_ext.html#rolling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#numpy_ext.rolling" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">numpy_ext.</code><code class="descname">rolling</code><span class="sig-paren">(</span><em>array: numpy.ndarray</em>, <em>window: int</em>, <em>skip_na: bool = False</em>, <em>as_array: bool = False</em><span class="sig-paren">)</span> &#x2192; Union[Generator[numpy.ndarray, NoneType, NoneType], numpy.ndarray]<a class="reference internal" href="_modules/numpy_ext.html#rolling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#numpy_ext.rolling" title="Permalink to this definition">¶</a></dt>
 <dd><p>Roll a fixed-width window over an array.
 The result is either a 2-D array or a generator of slices, controlled by <cite>as_array</cite> parameter.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -449,7 +449,7 @@ The result is either a 2-D array or a generator of slices, controlled by <cite>a
 </dd>
 <dt><strong>window</strong><span class="classifier">int</span></dt><dd><p>Size of the rolling window.</p>
 </dd>
-<dt><strong>skip_nans</strong><span class="classifier">bool, optional</span></dt><dd><p>If False, the sequence starts with (window-1) windows filled with nans. If True, those are omitted.
+<dt><strong>skip_na</strong><span class="classifier">bool, optional</span></dt><dd><p>If False, the sequence starts with (window-1) windows filled with nans. If True, those are omitted.
 Default is False.</p>
 </dd>
 <dt><strong>as_array</strong><span class="classifier">bool, optional</span></dt><dd><p>If True, return a 2-D array. Otherwise, return a generator of slices. Default is False.</p>
