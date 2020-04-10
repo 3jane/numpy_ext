@@ -78,19 +78,38 @@ def test_prepandna():
     assert np.array_equal(res[5:], array)
 
 
-def test_rolling():
-    array = np.array([1, 2.5, 0, 1, 3])
+@pytest.mark.parametrize(
+    'array, test_res, null_check_func',
+    [
+        (
+            np.array([1, 2.5, 0, 1, 3]),
+            np.array([
+                [np.nan, np.nan, 1],
+                [np.nan, 1., 2.5],
+                [1., 2.5, 0.],
+                [2.5, 0., 1.],
+                [0., 1., 3.]
+            ]),
+            np.isnan
+        ),
+        (
+            np.array(['2020-04-09', '2020-04-10', '2020-04-11', '2020-04-12', '2020-04-13'], dtype='datetime64[D]'),
+            np.array([
+                ['NaT', 'NaT', '2020-04-09'],
+                ['NaT', '2020-04-09', '2020-04-10'],
+                ['2020-04-09', '2020-04-10', '2020-04-11'],
+                ['2020-04-10', '2020-04-11', '2020-04-12'],
+                ['2020-04-11', '2020-04-12', '2020-04-13']], dtype='datetime64[D]'),
+            np.isnat
+        )
+    ]
+)
+def test_rolling(array, test_res, null_check_func):
     res = npext.rolling(array, 3, as_array=True)
-
-    assert np.isnan(res[:2]).any()
-    assert np.array_equal(
-        res[2:],
-        np.array([
-            [1., 2.5, 0.],
-            [2.5, 0., 1.],
-            [0., 1., 3.]
-        ])
-    )
+    for i in range(test_res.shape[0]):
+        for j in range(test_res.shape[1]):
+            v, test_v = res[i, j], test_res[i, j]
+            assert null_check_func(v) and null_check_func(test_v) or v == test_v
 
 
 def test_rolling_gen():
