@@ -8,7 +8,7 @@ with open('.version') as f:
 
 
 def parse_reqs(path):
-    return [str(r.req) for r in parse_requirements(path, session=pip_session)]
+    return [r.requirement for r in parse_requirements(path, session=pip_session)]
 
 
 with open('README.md') as f:
