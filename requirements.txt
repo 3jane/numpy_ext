@@ -1,2 +1,2 @@
-numpy~=1.16.4
-joblib~=0.14.1
+numpy==1.18.3
+joblib==0.14.1
