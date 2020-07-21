@@ -335,9 +335,9 @@ def rolling(
     """
     if not any(isinstance(window, t) for t in [int, np.integer]):
         raise TypeError(f'Wrong window type ({type(window)}) int expected')
-    
+
     window = int(window)
-    
+ 
     if array.size < window:
         raise ValueError('array.size should be bigger than window')
 
@@ -393,9 +393,9 @@ def rolling_apply(func: Callable, window: int, *arrays: np.ndarray, n_jobs: int 
     """
     if not any(isinstance(window, t) for t in [int, np.integer]):
         raise TypeError(f'Wrong window type ({type(window)}) int expected')
-    
-    window = int(window)   
-    
+
+    window = int(window)
+
     if max(len(x.shape) for x in arrays) != 1:
         raise ValueError('Wrong array shape. Supported only 1D arrays')
 
@@ -459,9 +459,9 @@ def expanding(
     """
     if not any(isinstance(min_periods, t) for t in [int, np.integer]):
         raise TypeError(f'Wrong min_periods type ({type(min_periods)}) int expected')
-    
+
     min_periods = int(min_periods)
-    
+
     if array.size < min_periods:
         raise ValueError('array.size should be bigger than min_periods')
 
@@ -511,7 +511,7 @@ def expanding_apply(func: Callable, min_periods: int, *arrays: np.ndarray, n_job
     """
     if not any(isinstance(min_periods, t) for t in [int, np.integer]):
         raise TypeError(f'Wrong min_periods type ({type(min_periods)}) int expected')
-       
+
     min_periods = int(min_periods)
 
     if max(len(x.shape) for x in arrays) != 1:
