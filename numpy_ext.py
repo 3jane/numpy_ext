@@ -333,8 +333,10 @@ def rolling(
     >>> np.sum(arr, axis=1)
     array([nan,  3.,  5.,  7.,  9.])
     """
-    if not isinstance(window, int):
+    if not any(isinstance(window, t) for t in [int, np.integer]):
         raise TypeError(f'Wrong window type ({type(window)}) int expected')
+
+    window = int(window)
 
     if array.size < window:
         raise ValueError('array.size should be bigger than window')
@@ -389,8 +391,10 @@ def rolling_apply(func: Callable, window: int, *arrays: np.ndarray, n_jobs: int 
     >>> rolling_apply(func, 2, arr, arr2, k=-1)
     array([  nan,  -5.5,  -8.5, -11.5, -14.5])
     """
-    if not isinstance(window, int):
+    if not any(isinstance(window, t) for t in [int, np.integer]):
         raise TypeError(f'Wrong window type ({type(window)}) int expected')
+
+    window = int(window)
 
     if max(len(x.shape) for x in arrays) != 1:
         raise ValueError('Wrong array shape. Supported only 1D arrays')
@@ -453,8 +457,10 @@ def expanding(
     array([array([1, 2, 3]), array([1, 2, 3, 4]), array([1, 2, 3, 4, 5])],
           dtype=object)
     """
-    if not isinstance(min_periods, int):
+    if not any(isinstance(min_periods, t) for t in [int, np.integer]):
         raise TypeError(f'Wrong min_periods type ({type(min_periods)}) int expected')
+
+    min_periods = int(min_periods)
 
     if array.size < min_periods:
         raise ValueError('array.size should be bigger than min_periods')
@@ -503,8 +509,10 @@ def expanding_apply(func: Callable, min_periods: int, *arrays: np.ndarray, n_job
     >>> expanding_apply(func, 2, arr, arr2, k=-1)
     array([  nan,  -5.5,  -9.5, -14.5, -20.5])
     """
-    if not isinstance(min_periods, int):
+    if not any(isinstance(min_periods, t) for t in [int, np.integer]):
         raise TypeError(f'Wrong min_periods type ({type(min_periods)}) int expected')
+
+    min_periods = int(min_periods)
 
     if max(len(x.shape) for x in arrays) != 1:
         raise ValueError('Supported only 1-D arrays')
