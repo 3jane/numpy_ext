@@ -337,7 +337,7 @@ def rolling(
         raise TypeError(f'Wrong window type ({type(window)}) int expected')
 
     window = int(window)
- 
+
     if array.size < window:
         raise ValueError('array.size should be bigger than window')
 
