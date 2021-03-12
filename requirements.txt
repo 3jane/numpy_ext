@@ -1,2 +1,2 @@
-numpy==1.18.3
-joblib==0.14.1
+numpy==1.20.1
+joblib==1.0.1
