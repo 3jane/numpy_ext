@@ -161,7 +161,7 @@ def apply_map(func: Callable[[Any], Any], array: Union[List, np.ndarray]) -> np.
 #############################
 
 
-def nans(shape: Union[int, Tuple[int]]) -> np.ndarray:
+def nans(shape: Union[int, Tuple[int]], dtype=np.float64) -> np.ndarray:
     """
     Return a new array of a given shape and type, filled with np.nan values.
 
@@ -169,6 +169,7 @@ def nans(shape: Union[int, Tuple[int]]) -> np.ndarray:
     ----------
     shape : int or tuple of ints
         Shape of the new array, e.g., (2, 3) or 2.
+    dtype: data-type, optional
 
     Returns
     -------
@@ -182,8 +183,12 @@ def nans(shape: Union[int, Tuple[int]]) -> np.ndarray:
     >>> nans((2, 2))
     array([[nan, nan],
            [nan, nan]])
+    >>> nans(2, np.datetime64)
+    array(['NaT', 'NaT'], dtype=datetime64)
     """
-    arr = np.empty(shape)
+    if np.issubdtype(dtype, np.integer):
+        dtype = np.float
+    arr = np.empty(shape, dtype=dtype)
     arr.fill(np.nan)
     return arr
 
@@ -283,7 +288,12 @@ def prepend_na(array: np.ndarray, n: int) -> np.ndarray:
     >>> prepend_na(np.array([1, 2]), 2)
     array([nan, nan,  1.,  2.])
     """
-    return np.hstack((nans(n), array))
+    return np.hstack(
+        (
+            nans(n, array[0].dtype) if len(array) and hasattr(array[0], 'dtype') else nans(n),
+            array
+        )
+    )
 
 
 #############################
@@ -343,13 +353,7 @@ def rolling(
 
     def rows_gen():
         if not skip_na:
-            prepend_func = prepend_na
-            if np.issubdtype(array.dtype, np.datetime64):
-
-                def prepend_func(arr, n):
-                    return np.hstack((np.repeat(np.datetime64('NaT'), n), arr))
-
-            yield from (prepend_func(array[:i + 1], (window - 1) - i) for i in np.arange(window - 1))
+            yield from (prepend_na(array[:i + 1], (window - 1) - i) for i in np.arange(window - 1))
 
         starts = np.arange(array.size - (window - 1))
         yield from (array[start:end] for start, end in zip(starts, starts + window))
