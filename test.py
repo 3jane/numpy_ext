@@ -146,6 +146,14 @@ def test_rolling_gen():
         ),
         (
             npext.rolling_apply,
+            np.array(['2021-02-02', '2021-02-03', '2021-02-05', '2021-02-01'], dtype=np.datetime64),
+            2,
+            np.max,
+            dict(),
+            np.array(['NaT', '2021-02-03', '2021-02-05', '2021-02-05'], dtype=np.datetime64)
+        ),
+        (
+            npext.rolling_apply,
             np.array([1, 2.5, 0, 1, 3]),
             3,
             sum,
@@ -216,8 +224,11 @@ def test_rolling_apply_wrong_window_type(window, apply):
         apply(sum, window, np.arange(20))
 
 
-def test_nans_array():
-    arr = npext.nans(5)
+@pytest.mark.parametrize(
+    'dtype', [np.float64, np.datetime64, np.int64]
+)
+def test_nans_array(dtype):
+    arr = npext.nans(5, dtype)
     assert arr.size == 5
     assert np.isnan(arr).all()
 
