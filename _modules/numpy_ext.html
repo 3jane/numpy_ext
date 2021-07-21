@@ -241,7 +241,7 @@
 <span class="c1">#############################</span>
 
 
-<div class="viewcode-block" id="nans"><a class="viewcode-back" href="../index.html#numpy_ext.nans">[docs]</a><span class="k">def</span> <span class="nf">nans</span><span class="p">(</span><span class="n">shape</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<div class="viewcode-block" id="nans"><a class="viewcode-back" href="../index.html#numpy_ext.nans">[docs]</a><span class="k">def</span> <span class="nf">nans</span><span class="p">(</span><span class="n">shape</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return a new array of a given shape and type, filled with np.nan values.</span>
 
@@ -249,6 +249,7 @@
 <span class="sd">    ----------</span>
 <span class="sd">    shape : int or tuple of ints</span>
 <span class="sd">        Shape of the new array, e.g., (2, 3) or 2.</span>
+<span class="sd">    dtype: data-type, optional</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -262,8 +263,12 @@
 <span class="sd">    &gt;&gt;&gt; nans((2, 2))</span>
 <span class="sd">    array([[nan, nan],</span>
 <span class="sd">           [nan, nan]])</span>
+<span class="sd">    &gt;&gt;&gt; nans(2, np.datetime64)</span>
+<span class="sd">    array([&#39;NaT&#39;, &#39;NaT&#39;], dtype=datetime64)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">dtype</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">):</span>
+        <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float</span>
+    <span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
     <span class="n">arr</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">arr</span></div>
 
@@ -363,7 +368,12 @@
 <span class="sd">    &gt;&gt;&gt; prepend_na(np.array([1, 2]), 2)</span>
 <span class="sd">    array([nan, nan,  1.,  2.])</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">nans</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">array</span><span class="p">))</span></div>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span>
+        <span class="p">(</span>
+            <span class="n">nans</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">array</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">array</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;dtype&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="n">nans</span><span class="p">(</span><span class="n">n</span><span class="p">),</span>
+            <span class="n">array</span>
+        <span class="p">)</span>
+    <span class="p">)</span></div>
 
 
 <span class="c1">#############################</span>
@@ -423,13 +433,7 @@
 
     <span class="k">def</span> <span class="nf">rows_gen</span><span class="p">():</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">skip_na</span><span class="p">:</span>
-            <span class="n">prepend_func</span> <span class="o">=</span> <span class="n">prepend_na</span>
-            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">array</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">):</span>
-
-                <span class="k">def</span> <span class="nf">prepend_func</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
-                    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">(</span><span class="s1">&#39;NaT&#39;</span><span class="p">),</span> <span class="n">n</span><span class="p">),</span> <span class="n">arr</span><span class="p">))</span>
-
-            <span class="k">yield from</span> <span class="p">(</span><span class="n">prepend_func</span><span class="p">(</span><span class="n">array</span><span class="p">[:</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="p">(</span><span class="n">window</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">window</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="k">yield from</span> <span class="p">(</span><span class="n">prepend_na</span><span class="p">(</span><span class="n">array</span><span class="p">[:</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="p">(</span><span class="n">window</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">window</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
 
         <span class="n">starts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">array</span><span class="o">.</span><span class="n">size</span> <span class="o">-</span> <span class="p">(</span><span class="n">window</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
         <span class="k">yield from</span> <span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">]</span> <span class="k">for</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">starts</span><span class="p">,</span> <span class="n">starts</span> <span class="o">+</span> <span class="n">window</span><span class="p">))</span>

@@ -374,7 +374,7 @@ Return a new np.ndarray with the resulting values.</p>
 
 <dl class="function">
 <dt id="numpy_ext.nans">
-<code class="descclassname">numpy_ext.</code><code class="descname">nans</code><span class="sig-paren">(</span><em>shape: Union[int, Tuple[int]]</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/numpy_ext.html#nans"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#numpy_ext.nans" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">numpy_ext.</code><code class="descname">nans</code><span class="sig-paren">(</span><em>shape: Union[int, Tuple[int]], dtype=&lt;class 'numpy.float64'&gt;</em><span class="sig-paren">)</span> &#x2192; numpy.ndarray<a class="reference internal" href="_modules/numpy_ext.html#nans"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#numpy_ext.nans" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a new array of a given shape and type, filled with np.nan values.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -383,6 +383,7 @@ Return a new np.ndarray with the resulting values.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
 <dt><strong>shape</strong><span class="classifier">int or tuple of ints</span></dt><dd><p>Shape of the new array, e.g., (2, 3) or 2.</p>
 </dd>
+<dt><strong>dtype: data-type, optional</strong></dt><dd></dd>
 </dl>
 </td>
 </tr>
@@ -400,6 +401,8 @@ Return a new np.ndarray with the resulting values.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">nans</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
 <span class="go">array([[nan, nan],</span>
 <span class="go">       [nan, nan]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nans</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">)</span>
+<span class="go">array([&#39;NaT&#39;, &#39;NaT&#39;], dtype=datetime64)</span>
 </pre></div>
 </div>
 </dd></dl>
