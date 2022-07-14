@@ -161,7 +161,7 @@ def apply_map(func: Callable[[Any], Any], array: Union[List, np.ndarray]) -> np.
 #############################
 
 
-def nans(shape: Union[int, Tuple[int, int]], dtype=np.float64) -> np.ndarray:
+def nans(shape: Union[int, Tuple[int]], dtype=np.float64) -> np.ndarray:
     """
     Return a new array of a given shape and type, filled with np.nan values.
 
