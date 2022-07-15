@@ -74,6 +74,24 @@ np.sum(rolls, axis=1)
 > array([nan, nan,  3.,  6.,  9., 12., 15., 18., 21., 24.])
 ```
 
+4) Apply a function with multiple output to a rolling window over the provided array, with no nans prepend
+
+```python
+
+res = npext.rolling_apply(
+        lambda x: (max(x), min(x)),
+        3,
+        np.array([1, 2, 5, 1, 6, 4, 0]),
+        prepend_nans=False,
+    )
+
+> array([[5, 1],
+       [5, 1],
+       [6, 1],
+       [6, 1],
+       [6, 0]])
+```
+
 ## License
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://tldrlegal.com/license/mit-license)
 

@@ -78,6 +78,21 @@ def test_prepandna():
     assert np.array_equal(res[5:], array)
 
 
+def test_prepandna_empty():
+    array = np.array([])
+    res = npext.prepend_na(array, 5)
+
+    assert res.size == 5
+    assert np.isnan(res).all()
+
+
+def test_prepandna_multidimension():
+    array = np.array([[1.5, 2.3], [0.5, 2.5]])
+    res = npext.prepend_na(array, 2)
+    assert np.isnan(res[:2]).all()
+    assert np.array_equal(res[2:], array)
+
+
 @pytest.mark.parametrize(
     'array, test_res, null_check_func',
     [
@@ -127,6 +142,36 @@ def test_rolling_gen():
     assert np.isnan(res_gen[:2]).any()
     assert np.array_equal(res_gen[2:], res[2:])
     assert np.array_equal(res_gen_skip, res[2:])
+
+
+@pytest.fixture(params=[True, False])
+def prepend_nans(request):
+    return request.param
+
+
+def test_rolling_apply_multiple_dim_result(n_jobs, prepend_nans):
+    window = 3
+    res = npext.rolling_apply(
+        lambda x: (max(x), int(np.mean(x)), min(x)),
+        window,
+        np.array([1, 2, 5, 1, 6, 4, 0]),
+        prepend_nans=prepend_nans,
+        n_jobs=n_jobs
+    )
+
+    test_res = np.array([
+        [5.0, 2.0, 1.0],
+        [5.0, 2.0, 1.0],
+        [6.0, 4.0, 1.0],
+        [6.0, 3.0, 1.0],
+        [6.0, 3.0, 0.0]
+    ])
+    if prepend_nans:
+        assert res.shape == (test_res.shape[0] + window - 1, test_res.shape[1])
+        assert np.isnan(res[:window - 1]).all()
+        assert np.array_equal(res[window - 1:], test_res)
+    else:
+        assert np.array_equal(res, test_res)
 
 
 @pytest.mark.parametrize(
@@ -182,22 +227,25 @@ def test_rolling_gen():
         )
     ]
 )
-def test_window_apply_func(apply, input, window, func, params, test_result, n_jobs):
+def test_window_apply_func(apply, input, window, func, params, test_result, n_jobs, prepend_nans):
     if isinstance(input, np.ndarray):
-        res = apply(
-            func, window, input, n_jobs=n_jobs, **params
+        res = apply(func, window, input, prepend_nans=prepend_nans, n_jobs=n_jobs, **params)
+    else:
+        res = apply(func, window, *input, prepend_nans=prepend_nans, n_jobs=n_jobs, **params)
+
+    if prepend_nans:
+        assert test_result.size == res.size
+        assert np.isnan(res[:window - 1]).all()
+        assert np.array_equal(
+            res[window - 1:],
+            test_result[window - 1:]
         )
     else:
-        res = apply(
-            func, window, *input, n_jobs=n_jobs, **params
+        assert test_result.size - window + 1 == res.size
+        assert np.array_equal(
+            res,
+            test_result[window - 1:]
         )
-
-    assert test_result.size == res.size
-    assert np.isnan(res[:window - 1]).all()
-    assert np.array_equal(
-        res[window - 1:],
-        test_result[window - 1:]
-    )
 
 
 @pytest.mark.parametrize(
