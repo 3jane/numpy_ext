@@ -241,7 +241,7 @@
 <span class="c1">#############################</span>
 
 
-<div class="viewcode-block" id="nans"><a class="viewcode-back" href="../index.html#numpy_ext.nans">[docs]</a><span class="k">def</span> <span class="nf">nans</span><span class="p">(</span><span class="n">shape</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<div class="viewcode-block" id="nans"><a class="viewcode-back" href="../index.html#numpy_ext.nans">[docs]</a><span class="k">def</span> <span class="nf">nans</span><span class="p">(</span><span class="n">shape</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return a new array of a given shape and type, filled with np.nan values.</span>
 
@@ -368,12 +368,22 @@
 <span class="sd">    &gt;&gt;&gt; prepend_na(np.array([1, 2]), 2)</span>
 <span class="sd">    array([nan, nan,  1.,  2.])</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span>
-        <span class="p">(</span>
-            <span class="n">nans</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">array</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">array</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;dtype&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="n">nans</span><span class="p">(</span><span class="n">n</span><span class="p">),</span>
-            <span class="n">array</span>
-        <span class="p">)</span>
-    <span class="p">)</span></div>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">array</span><span class="p">):</span>  <span class="c1"># if empty, simply create empty array</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">nans</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">array</span><span class="p">))</span>
+
+    <span class="n">elem</span> <span class="o">=</span> <span class="n">array</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="s1">&#39;dtype&#39;</span><span class="p">):</span>
+        <span class="n">dtype</span> <span class="o">=</span> <span class="n">elem</span><span class="o">.</span><span class="n">dtype</span>
+
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="s1">&#39;__len__&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># if the array has many dimension</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="n">array_shape</span> <span class="o">=</span> <span class="n">array</span><span class="o">.</span><span class="n">shape</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">array_shape</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">array</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">nans</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="o">*</span><span class="n">array_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:]),</span> <span class="n">dtype</span><span class="p">),</span> <span class="n">array</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">nans</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">dtype</span><span class="p">),</span> <span class="n">array</span><span class="p">))</span></div>
 
 
 <span class="c1">#############################</span>
@@ -441,7 +451,14 @@
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">row</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows_gen</span><span class="p">()])</span> <span class="k">if</span> <span class="n">as_array</span> <span class="k">else</span> <span class="n">rows_gen</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="rolling_apply"><a class="viewcode-back" href="../index.html#numpy_ext.rolling_apply">[docs]</a><span class="k">def</span> <span class="nf">rolling_apply</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">window</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">*</span><span class="n">arrays</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">n_jobs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<div class="viewcode-block" id="rolling_apply"><a class="viewcode-back" href="../index.html#numpy_ext.rolling_apply">[docs]</a><span class="k">def</span> <span class="nf">rolling_apply</span><span class="p">(</span>
+    <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span>
+    <span class="n">window</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="o">*</span><span class="n">arrays</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">prepend_nans</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">n_jobs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Roll a fixed-width window over an array or a group of arrays, producing slices.</span>
 <span class="sd">    Apply a function to each slice / group of slices, transforming them into a value.</span>
@@ -456,6 +473,8 @@
 <span class="sd">        Window size.</span>
 <span class="sd">    *arrays : list</span>
 <span class="sd">        List of input arrays.</span>
+<span class="sd">    prepend_nans : bool</span>
+<span class="sd">        Specifies if nans should be prepended to the resulting array</span>
 <span class="sd">    n_jobs : int, optional</span>
 <span class="sd">        Parallel tasks count for joblib. If 1, joblib won&#39;t be used. Default is 1.</span>
 <span class="sd">    **kwargs : dict</span>
@@ -505,7 +524,7 @@
         <span class="n">f</span> <span class="o">=</span> <span class="n">delayed</span><span class="p">(</span><span class="n">_apply_func_to_arrays</span><span class="p">)</span>
         <span class="n">arr</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="n">n_jobs</span><span class="p">)(</span><span class="n">f</span><span class="p">(</span><span class="n">idxs</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]])</span> <span class="k">for</span> <span class="n">idxs</span> <span class="ow">in</span> <span class="n">rolls</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">prepend_na</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">window</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">prepend_na</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">window</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="k">if</span> <span class="n">prepend_nans</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="expanding"><a class="viewcode-back" href="../index.html#numpy_ext.expanding">[docs]</a><span class="k">def</span> <span class="nf">expanding</span><span class="p">(</span>
@@ -558,7 +577,14 @@
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">row</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows_gen</span><span class="p">()])</span> <span class="k">if</span> <span class="n">as_array</span> <span class="k">else</span> <span class="n">rows_gen</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="expanding_apply"><a class="viewcode-back" href="../index.html#numpy_ext.expanding_apply">[docs]</a><span class="k">def</span> <span class="nf">expanding_apply</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">min_periods</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">*</span><span class="n">arrays</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">n_jobs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<div class="viewcode-block" id="expanding_apply"><a class="viewcode-back" href="../index.html#numpy_ext.expanding_apply">[docs]</a><span class="k">def</span> <span class="nf">expanding_apply</span><span class="p">(</span>
+    <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span>
+    <span class="n">min_periods</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="o">*</span><span class="n">arrays</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">prepend_nans</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">n_jobs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Roll an expanding window over an array or a group of arrays producing slices.</span>
 <span class="sd">    The window size starts at min_periods and gets incremented by 1 on each iteration.</span>
@@ -574,6 +600,8 @@
 <span class="sd">        Minimal size of expanding window.</span>
 <span class="sd">    *arrays : list</span>
 <span class="sd">        List of input arrays.</span>
+<span class="sd">    prepend_nans : bool</span>
+<span class="sd">        Specifies if nans should be prepended to the resulting array</span>
 <span class="sd">    n_jobs : int, optional</span>
 <span class="sd">        Parallel tasks count for joblib. If 1, joblib won&#39;t be used. Default is 1.</span>
 <span class="sd">    **kwargs : dict</span>
@@ -623,7 +651,7 @@
         <span class="n">f</span> <span class="o">=</span> <span class="n">delayed</span><span class="p">(</span><span class="n">_apply_func_to_arrays</span><span class="p">)</span>
         <span class="n">arr</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="n">n_jobs</span><span class="p">)(</span><span class="nb">map</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">rolls</span><span class="p">))</span>
 
-    <span class="k">return</span> <span class="n">prepend_na</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">min_periods</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">prepend_na</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">min_periods</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="k">if</span> <span class="n">prepend_nans</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span></div>
 </pre></div>
 
           </div>
