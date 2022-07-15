@@ -58,11 +58,11 @@ Number = Union[int, float]
 
 
 def expstep_range(
-        start: Number,
-        end: Number,
-        min_step: Number = 1,
-        step_mult: Number = 1,
-        round_func: Callable = None
+    start: Number,
+    end: Number,
+    min_step: Number = 1,
+    step_mult: Number = 1,
+    round_func: Callable = None
 ) -> np.ndarray:
     """
     Return spaced values within a given interval. Step is increased by a multiplier on each iteration.
@@ -161,7 +161,7 @@ def apply_map(func: Callable[[Any], Any], array: Union[List, np.ndarray]) -> np.
 #############################
 
 
-def nans(shape: Union[int, Tuple[int]], dtype=np.float64) -> np.ndarray:
+def nans(shape: Union[int, Tuple[int, ...]], dtype=np.float64) -> np.ndarray:
     """
     Return a new array of a given shape and type, filled with np.nan values.
 
@@ -296,11 +296,14 @@ def prepend_na(array: np.ndarray, n: int) -> np.ndarray:
     if hasattr(elem, 'dtype'):
         dtype = elem.dtype
 
-    nans_shape = n
-    if elem.ndim > 1:  # if the element has many dimension, we should replicate them
-        nans_shape = (n, *elem.shape)
-
-    return np.hstack((nans(nans_shape, dtype), array))
+    if hasattr(elem, '__len__') and len(elem) > 1:  # if the array has many dimension
+        if isinstance(array, np.ndarray):
+            array_shape = array.shape
+        else:
+            array_shape = np.array(array).shape
+        return np.vstack((nans((n, *array_shape[1:]), dtype), array))
+    else:
+        return np.hstack((nans(n, dtype), array))
 
 
 #############################
@@ -309,10 +312,10 @@ def prepend_na(array: np.ndarray, n: int) -> np.ndarray:
 
 
 def rolling(
-        array: np.ndarray,
-        window: int,
-        skip_na: bool = False,
-        as_array: bool = False
+    array: np.ndarray,
+    window: int,
+    skip_na: bool = False,
+    as_array: bool = False
 ) -> Union[Generator[np.ndarray, None, None], np.ndarray]:
     """
     Roll a fixed-width window over an array.
@@ -368,8 +371,14 @@ def rolling(
     return np.array([row for row in rows_gen()]) if as_array else rows_gen()
 
 
-def rolling_apply(func: Callable, window: int, *arrays: np.ndarray, prepend_nans: bool = True, n_jobs: int = 1,
-                  **kwargs) -> np.ndarray:
+def rolling_apply(
+    func: Callable,
+    window: int,
+    *arrays: np.ndarray,
+    prepend_nans: bool = True,
+    n_jobs: int = 1,
+    **kwargs
+) -> np.ndarray:
     """
     Roll a fixed-width window over an array or a group of arrays, producing slices.
     Apply a function to each slice / group of slices, transforming them into a value.
@@ -435,14 +444,14 @@ def rolling_apply(func: Callable, window: int, *arrays: np.ndarray, prepend_nans
         f = delayed(_apply_func_to_arrays)
         arr = Parallel(n_jobs=n_jobs)(f(idxs[[0, -1]]) for idxs in rolls)
 
-    return prepend_na(arr, n=window - 1) if prepend_nans else arr
+    return prepend_na(arr, n=window - 1) if prepend_nans else np.array(arr)
 
 
 def expanding(
-        array: np.ndarray,
-        min_periods: int = 1,
-        skip_na: bool = True,
-        as_array: bool = False
+    array: np.ndarray,
+    min_periods: int = 1,
+    skip_na: bool = True,
+    as_array: bool = False
 ) -> Union[Generator[np.ndarray, None, None], np.ndarray]:
     """
     Roll an expanding window over an array.
@@ -488,7 +497,14 @@ def expanding(
     return np.array([row for row in rows_gen()]) if as_array else rows_gen()
 
 
-def expanding_apply(func: Callable, min_periods: int, *arrays: np.ndarray, n_jobs: int = 1, **kwargs) -> np.ndarray:
+def expanding_apply(
+    func: Callable,
+    min_periods: int,
+    *arrays: np.ndarray,
+    prepend_nans: bool = True,
+    n_jobs: int = 1,
+    **kwargs
+) -> np.ndarray:
     """
     Roll an expanding window over an array or a group of arrays producing slices.
     The window size starts at min_periods and gets incremented by 1 on each iteration.
@@ -504,6 +520,8 @@ def expanding_apply(func: Callable, min_periods: int, *arrays: np.ndarray, n_job
         Minimal size of expanding window.
     *arrays : list
         List of input arrays.
+    prepend_nans : bool
+        Specifies if nans should be prepended to the resulting array
     n_jobs : int, optional
         Parallel tasks count for joblib. If 1, joblib won't be used. Default is 1.
     **kwargs : dict
@@ -553,4 +571,4 @@ def expanding_apply(func: Callable, min_periods: int, *arrays: np.ndarray, n_job
         f = delayed(_apply_func_to_arrays)
         arr = Parallel(n_jobs=n_jobs)(map(f, rolls))
 
-    return prepend_na(arr, n=min_periods - 1)
+    return prepend_na(arr, n=min_periods - 1) if prepend_nans else np.array(arr)
