@@ -273,7 +273,7 @@ def test_rolling_apply_wrong_window_type(window, apply):
 
 
 @pytest.mark.parametrize(
-    'dtype', [np.float64, np.datetime64, np.int64]
+    'dtype', [float, np.datetime64, int]
 )
 def test_nans_array(dtype):
     arr = npext.nans(5, dtype)
@@ -289,7 +289,7 @@ def test_nans_array(dtype):
             np.array([-1.0, -2.0, -3.5, -5.75, -9.125, -14.1875, -21.78125, -33.171875, -50.2578125, -75.88671875])
         ),
         (
-            dict(start=1, end=100, min_step=1, step_mult=1.5, round_func=lambda a: a.astype(np.int)),
+            dict(start=1, end=100, min_step=1, step_mult=1.5, round_func=lambda a: a.astype(int)),
             np.array([1, 2, 3, 5, 9, 14, 21, 33, 50, 75])
         ),
         (
